@@ -1,0 +1,183 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Lambda application that calls the Lambda API.
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: Api Gateway for user management
+      OpenApiVersion: 3.0.0
+      StageName: test
+      DefinitionUri: api.yaml
+
+  GetInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetInfo
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.GetInfoHandler
+      Runtime: java17
+      Description: Get User Info Function
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+  GetInfoFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt GetInfoFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+  LogInFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: LogIn
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.LogInHandler
+      Runtime: java17
+      Description: Log In Handler
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+  LogInFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt LogInFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+  SignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SignUp
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.SignUpHandler
+      Runtime: java17
+      Description: Sign Up Handler
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+  SignUpFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt SignUpFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+  GetAllSubmissionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetAllSubmissions
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.GetAllSubmissionsHandler
+      Runtime: java17
+      Description: Get All Submissions Handler
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+  GetAllSubmissionsFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt GetAllSubmissionsFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+  GetSubmissionByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetSubmissionById
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.GetSubmissionByIdHandler
+      Runtime: java17
+      Description: Get submission by id Handler
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+
+  PostSubmissionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: PostSubmission
+      CodeUri: Functions/build/distributions/Functions-1.0-SNAPSHOT.zip
+      Handler: org.example.function.PostSubmissionHandler
+      Runtime: java17
+      Description: Post a submission
+      MemorySize: 512
+      Timeout: 10
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
+#      Environment:
+#        Variables:
+#          REDIS_ENDPOINT:
+#            Fn::GetAtt:
+#              - "RedisCluster"
+#              - "ConfigurationEndpoint.Address"
+
+  PostSubmissionFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PostSubmissionFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+  GetSubmissionByIdFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt GetSubmissionByIdFunction.Arn
+      Principal: apigateway.amazonaws.com
+
+#  MyRedisSecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupName: MyRedisSecurityGroup
+#      GroupDescription: Security group for Redis ElastiCache
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: 6379
+#          ToPort: 6379
+#          CidrIp: 0.0.0.0/0  # Allow traffic from all IP addresses for demonstration purposes
+#
+#  RedisCluster:
+#    Type: AWS::ElastiCache::CacheCluster
+#    Properties:
+#      CacheNodeType: cache.t2.micro
+#      Engine: redis
+#      NumCacheNodes: 1
+#      VpcSecurityGroupIds:
+#        - !GetAtt [ MyRedisSecurityGroup, GroupId ]
+
+
