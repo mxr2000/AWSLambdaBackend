@@ -13,7 +13,7 @@ import java.util.Objects;
 public class GetAllSubmissionsHandler implements RequestHandler<Void, List<SubmissionItem>> {
     @Override
     public List<SubmissionItem> handleRequest(Void input, Context context) {
-        /*String redisEndpoint = "3.83.120.140";
+        String redisEndpoint = "3.83.120.140";
         try (Jedis jedis = new Jedis(redisEndpoint, 6379)) {
             return jedis.hgetAll("submissions").values().stream().map(v -> {
                 try {
@@ -24,7 +24,7 @@ public class GetAllSubmissionsHandler implements RequestHandler<Void, List<Submi
             }).filter(Objects::nonNull).toList();
         } catch (Exception e) {
             throw e;
-        }*/
-        return new SubmissionDao().getAllSubmissions();
+        }
+        //return new SubmissionDao().getAllSubmissions();
     }
 }
