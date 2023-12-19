@@ -8,6 +8,6 @@ public class DemoHandler implements RequestHandler<Integer, DemoResponse> {
     @Override
     public DemoResponse handleRequest(Integer input, Context context) {
 
-        return new DemoResponse().id(100).code("202").message("Fuck u");
+        return new DemoResponse().id(100).code("202").message("Hello");
     }
 }
